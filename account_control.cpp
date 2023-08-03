@@ -42,7 +42,7 @@ bool password_constraint_check(string password)
 }
 bool control_table::checkWeakPass(string pass)
 {
-    return lookup(pass);
+    return lookup_pass(pass);
 }
 control_table::control_table() {
     ifstream checklist("Weak-Pass.txt");
@@ -108,11 +108,6 @@ void control_table::create_account(){
     }
     current_state = 0;
     insert(username);
-    string file_out = "account.txt";
-    ofstream out;
-    out.open(file_out, ios::app);
-    out<<username<<" "<<password<<endl;
-    out.close();
     user_pass[username] = password;
     cout<<"Account created successfully"<<endl;
     choosing_operation();
@@ -157,7 +152,7 @@ void control_table::multiple_register()
         file_in >> name;
         file_in >> password;
 
-        if (!constraint_check(name) || !password_constraint_check(password) || checkWeakPass(password) || lookup(name) || lookup(password))
+        if (!constraint_check(name) || !password_constraint_check(password) || checkWeakPass(password) || lookup(name) || lookup_pass(password))
         {
             file_out << name << " " << password << endl;
         }
@@ -165,9 +160,9 @@ void control_table::multiple_register()
         {
             insert(name);
             user_pass[name] = password;
-            out << name << " " <<password << endl;
         }
     }
+    choosing_operation();
 }
 
 void control_table::login()
@@ -191,11 +186,29 @@ void control_table::login()
     {
         cout << "Please enter your password: ";
         cin>>pass;
+        if (pass == "X" || pass == "x")
+        {
+            current_state = 0;
+            choosing_operation();
+        }
         check_pass = check_correct_password(name, pass);
-        if (!check_pass) cout << "Your password is not correct! Please try again!\n";
+        if (!check_pass) cout << "Your password is not correct! Please try again! or Press X to exit\n";
     }
 
     cout << "Successfully logged in!\n";
+    cout << "Press X to logout!\n";
+    char c;
+    cin >> c;
+    if (c == 'X' || c == 'x')
+    {
+        current_state = 0;
+        choosing_operation();
+    }
+    else
+    {
+        cout << "Invalid input!\n";
+        return;
+    }
 }
 
 void control_table::change_password()
@@ -241,6 +254,8 @@ void control_table::change_password()
     }
 
     cout << "Successfully changed password!\n";
+    user_pass[name] = new_pass;
+    choosing_operation();
 
 }
 
@@ -259,7 +274,16 @@ void control_table::choosing_operation() {
     else if (current_state == 2) login();
     else if (current_state == 3) change_password();
     else if (current_state == 4) multiple_register();
-    else if (current_state == 5) return;
+    else if (current_state == 5) {
+        std::cout << "Goodbye!" << std::endl;
+        //write all username and password from map to file = "account.txt"
+        ofstream file_out;
+        file_out.open("account.txt");
+        for (auto it = user_pass.begin(); it != user_pass.end(); it++) {
+            file_out << it->first << " " << it->second << endl;
+        }
+        return;
+    }
     else {
         choosing_operation();
     }

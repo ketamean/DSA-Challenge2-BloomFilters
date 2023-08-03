@@ -9,10 +9,10 @@
 using namespace std;
 
 struct control_table {
-    int sz = 1e6;
+    int sz = 1e6 + 3;
     int assigned = 0;
-    bool bitarray[1000000] = {0};
-    bool pass_bitarray[1000000] = {0};
+    bool bitarray[1000003] = {0};
+    bool pass_bitarray[1000003] = {0};
     int current_state = 0;
 
     map<string, string> user_pass;
@@ -20,6 +20,7 @@ struct control_table {
 
     vector<int> hash(string s);
     bool lookup(string s);
+    bool lookup_pass(string s);
     void insert(string s);
     void choosing_operation();
     void create_account();

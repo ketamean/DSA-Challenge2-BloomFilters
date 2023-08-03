@@ -31,7 +31,7 @@ unsigned int h2(string s, int arrSize)
     unsigned ll int hash = 1;
     for (int i = 0; i < s.size(); i++) 
     {
-        hash = hash + pow(4, i) * s[i];
+        hash = hash + pow(19, i) * s[i];
         hash = hash % arrSize;
     }
     return hash % arrSize;
@@ -54,6 +54,16 @@ bool control_table::lookup(string s)
     vector<int> h = hash(s);
     for (int i = 0; i < h.size(); ++i) {
         if (bitarray[h[i]] == 0)
+            return false;
+    }
+    return true;
+}
+
+bool control_table::lookup_pass(string s)
+{
+    vector<int> h = hash(s);
+    for (int i = 0; i < h.size(); ++i) {
+        if (pass_bitarray[h[i]] == 0)
             return false;
     }
     return true;
