@@ -100,6 +100,7 @@ void control_table::create_account(){
         if (cons3)
         {
             std::cout<<"Username has been used before"<<endl;
+            std::cout<<"Please enter your username: ";
             getline(cin, username);
             std::cout<<"Please enter your password: ";
             getline(cin, password);
@@ -162,6 +163,8 @@ void control_table::multiple_register()
             user_pass[name] = password;
         }
     }
+    system("cls");
+    cout << "Multiple register successfully!\n";
     choosing_operation();
 }
 
@@ -180,7 +183,7 @@ void control_table::login()
     if (!check_name)
     {
         cout << "Username is not exist!\n";
-        return;
+        choosing_operation();
     }
 
     while (!check_pass)
@@ -230,15 +233,20 @@ void control_table::change_password()
     if (!check_name)
     {
         cout << "Username is not exist!\n";
-        return;
+        choosing_operation();
     }
 
     while (!check_pass)
     {
         cout << "Please enter your OLD password: ";
         getline(cin, pass);
+        if (pass == "X" || pass == "x")
+        {
+            current_state = 0;
+            choosing_operation();
+        }
         check_pass = check_correct_password(name, pass);
-        if (!check_pass) cout << "Your password is not correct! Please try again!\n";
+        if (!check_pass) cout << "Your password is not correct! Please try again! or press X to exit\n";
     }
 
     while (!check_new_pass)
@@ -253,7 +261,12 @@ void control_table::change_password()
     {
         cout << "Please enter your NEW password one more time: ";
         getline(cin, new_pass_2);
-        if (new_pass_2 != new_pass) cout << "The new password is not correct! Please try again!\n";
+        if (new_pass_2 == "X" || new_pass_2 == "x")
+        {
+            current_state = 0;
+            choosing_operation();
+        }
+        if (new_pass_2 != new_pass) cout << "The new password is not correct! Please try again! or press X to exit\n";
     }
 
     cout << "Successfully changed password!\n";
@@ -263,8 +276,6 @@ void control_table::change_password()
 }
 
 void control_table::choosing_operation() {
-    system("cls");
-
     std::cout << "Please choose an operation: " << std::endl;
     std::cout << "1. Create a new account" << std::endl;
     std::cout << "2. Login" << std::endl;
