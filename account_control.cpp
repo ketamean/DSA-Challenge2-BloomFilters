@@ -184,6 +184,7 @@ void control_table::login()
     {
         cout << "Username is not exist!\n";
         choosing_operation();
+        return;
     }
 
     while (!check_pass)
@@ -194,6 +195,7 @@ void control_table::login()
         {
             current_state = 0;
             choosing_operation();
+            return;
         }
         check_pass = check_correct_password(name, pass);
         if (!check_pass) cout << "Your password is not correct! Please try again! or Press X to exit\n";
@@ -207,6 +209,7 @@ void control_table::login()
     {
         current_state = 0;
         choosing_operation();
+        return;
     }
     else
     {
@@ -234,6 +237,7 @@ void control_table::change_password()
     {
         cout << "Username is not exist!\n";
         choosing_operation();
+        return;
     }
 
     while (!check_pass)
@@ -244,6 +248,7 @@ void control_table::change_password()
         {
             current_state = 0;
             choosing_operation();
+            return;
         }
         check_pass = check_correct_password(name, pass);
         if (!check_pass) cout << "Your password is not correct! Please try again! or press X to exit\n";
@@ -265,6 +270,7 @@ void control_table::change_password()
         {
             current_state = 0;
             choosing_operation();
+            return;
         }
         if (new_pass_2 != new_pass) cout << "The new password is not correct! Please try again! or press X to exit\n";
     }
