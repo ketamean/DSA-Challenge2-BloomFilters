@@ -11,8 +11,8 @@ using namespace std;
 struct control_table {
     int sz = 1e6;
     int assigned = 0;
-    bool bitarray[1000000];
-    bool pass_bitarray[1000000];
+    bool bitarray[1000000] = {0};
+    bool pass_bitarray[1000000] = {0};
     int current_state = 0;
 
     map<string, string> user_pass;

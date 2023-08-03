@@ -45,7 +45,6 @@ bool control_table::checkWeakPass(string pass)
     return lookup(pass);
 }
 control_table::control_table() {
-    for (int i = 0; i < sz; i++) bitarray[i] = pass_bitarray[i] = 0;
     ifstream checklist("Weak-Pass.txt");
     string s;
     while (checklist >> s)
