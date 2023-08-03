@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 #include "bloomFilter.h"
 
@@ -13,7 +14,7 @@ struct control_table {
     void choosing_operation();
     void create_account();
 
-    int hash(string s);
+    vector<int> hash(string s);
     bool lookup(string s);
     void insert(string s);
 };
