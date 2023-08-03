@@ -1,6 +1,4 @@
-#ifndef BLOOMFILTER_H
-#define BLOOMFILTER_H
-
+#pragma once
 #include <string>
 
 #define ll long long
@@ -17,4 +15,3 @@ bool lookup(bool* bitarray, int arrSize, std::string s);
 // Insert operation
 void insert(bool* bitarray, int arrSize, std::string s);
 
-#endif /* BLOOMFILTER_H */
