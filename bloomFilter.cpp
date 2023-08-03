@@ -42,8 +42,8 @@ vector<int> control_table::hash(string s) {
     int _h2 = h2(s, sz);
     int h = 0;
 
-    vector<int> res(32);
-    for (int i = 0; i < min(assigned, 32); i++) {
+    vector<int> res(25);
+    for (int i = 0; i < min(assigned, 25); i++) {
         res[i] = _h1 + i * _h2;
     }
     return res;
