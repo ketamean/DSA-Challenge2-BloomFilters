@@ -165,7 +165,7 @@ void control_table::multiple_register()
         {
             insert(name);
             user_pass[name] = password;
-            out << name << password << endl;
+            out << name << " " <<password << endl;
         }
     }
 }

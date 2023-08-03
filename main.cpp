@@ -1,9 +1,6 @@
 #include <iostream>
 #include "bloomFilter.h"
-#include "bloomFilter.cpp"
 #include "account_control.h"
-#include "account_control.cpp"
-
 using namespace std;
 
 int main()
