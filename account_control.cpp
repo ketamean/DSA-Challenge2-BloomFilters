@@ -118,14 +118,16 @@ void control_table::choosing_operation() {
     std::cout << "1. Create a new account" << std::endl;
     std::cout << "2. Login" << std::endl;
     std::cout << "3. Change password" << std::endl;
-    std::cout << "4. Exit" << std::endl;
+    std::cout << "4. Load accounts from file: " << std::endl;
+    std::cout << "5. Exit" << std::endl;
     std::cout << "Your choice: ";
     std::cin >> current_state;
     std::cout << std::endl;
     if (current_state == 1) create_account();
     else if (current_state == 2) login();
     else if (current_state == 3) change_password();
-    else if (current_state == 4) return;
+    else if (current_state == 4) multiple_register();
+    else if (current_state == 5) return;
     else {
         std::cout << "Invalid operation" << std::endl;
         choosing_operation();

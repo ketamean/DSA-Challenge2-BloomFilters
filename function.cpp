@@ -17,12 +17,15 @@ void control_table::multiple_register()
     system("cls");
     string file = "SignUp.txt";
     string output = "Fail.txt";
+    string accounts = "account.txt";
 
     ifstream file_in;
+    ofstream out;
     ofstream file_out;
 
     file_in.open(file);
     file_out.open(output);
+    out.open(accounts, ios::app);
 
     if (!file_in.is_open())
     {
@@ -45,6 +48,7 @@ void control_table::multiple_register()
         {
             insert(bitarray, sz, name);
             user_pass[name] = password;
+            out << name << password << endl;
         }
     }
 }
