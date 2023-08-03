@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <chrono>
 #include <ctime>
+#include "account_control.h"
 
 #define ll long long
 using namespace std;
@@ -35,63 +36,40 @@ int h2(string s, int arrSize)
     }
     return hash % arrSize;
 }
-  
-// hash 3
-int h3(string s, int arrSize)
-{
-    ll int hash = 7;
-    for (int i = 0; i < s.size(); i++) 
-    {
-        hash = (hash * 31 + s[i]) % arrSize;
+
+int control_table::hash(string s) {
+    int _h1 = h1(s, sz);
+    int _h2 = h2(s, sz);
+    int h = 0;
+    for (int i = 0; i < assigned; i++) {
+        h += _h1 + i * _h2;
     }
-    return hash % arrSize;
+    return h;
 }
-  
-// hash 4
-int h4(string s, int arrSize)
-{
-    ll int hash = 3;
-    int p = 7;
-    for (int i = 0; i < s.size(); i++) {
-        hash += hash * 7 + s[0] * pow(p, i);
-        hash = hash % arrSize;
-    }
-    return hash;
-}
-  
   
 // lookup operation
-bool lookup(bool* bitarray, int arrSize, string s)
+bool control_table::lookup(string s)
 {
-    int a = h1(s, arrSize);
-    int b = h2(s, arrSize);
-    int c = h3(s, arrSize);
-    int d = h4(s, arrSize);
+    int h = hash(s);
   
-    if (bitarray[a] && bitarray[b] && bitarray[c]
-        && bitarray[d])
+    if (bitarray[h])
         return true;
     else
         return false;
 }
   
 // insert operation
-void insert(bool* bitarray, int arrSize, string s)
+void control_table::insert(string s)
 {
     // check if the element in already present or not
-    if (lookup(bitarray, arrSize, s))
+    if (lookup(s))
         cout << s << " is Probably already present" << endl;
     else 
     {
-        int a = h1(s, arrSize);
-        int b = h2(s, arrSize);
-        int c = h3(s, arrSize);
-        int d = h4(s, arrSize);
-  
-        bitarray[a] = true;
-        bitarray[b] = true;
-        bitarray[c] = true;
-        bitarray[d] = true;
-  
+        int h = hash(s);
+        if (bitarray[h] == false) {
+            assigned++;
+            bitarray[h] = true;
+        }
     }
 }

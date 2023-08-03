@@ -76,7 +76,7 @@ void control_table::create_account(){
             std::cin>>password;
             continue;
         }
-        cons3 = lookup(bitarray, sz, username);
+        cons3 = lookup(username);
         if (!cons3)
         {
             std::cout<<"Username has been used before"<<endl;
