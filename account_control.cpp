@@ -62,6 +62,7 @@ control_table::control_table() {
     }
     file.close();
 }
+
 void control_table::create_account(){
 
     system("cls");
@@ -241,6 +242,7 @@ void control_table::change_password()
     }
 
     cout << "Successfully changed password!\n";
+
 }
 
 void control_table::choosing_operation() {

@@ -31,32 +31,33 @@ int h2(string s, int arrSize)
     ll int hash = 1;
     for (int i = 0; i < s.size(); i++) 
     {
-        hash = hash + pow(19, i) * s[i];
+        hash = hash + pow(4, i) * s[i];
         hash = hash % arrSize;
     }
     return hash % arrSize;
 }
 
-int control_table::hash(string s)
-{
+vector<int> control_table::hash(string s) {
     int _h1 = h1(s, sz);
     int _h2 = h2(s, sz);
     int h = 0;
-    for (int i = 0; i < assigned; i++) {
-        h += _h1 + i * _h2;
+
+    vector<int> res(32);
+    for (int i = 0; i < min(assigned, 32); i++) {
+        res[i] = _h1 + i * _h2;
     }
-    return h;
+    return res;
 }
- 
+
 // lookup operation
 bool control_table::lookup(string s)
 {
-    int h = hash(s);
-  
-    if (bitarray[h])
-        return true;
-    else
-        return false;
+    vector<int> h = hash(s);
+    for (int i = 0; i < h.size(); ++i) {
+        if (bitarray[h[i]] == 0)
+            return false;
+    }
+    return true;
 }
   
 // insert operation
@@ -65,12 +66,15 @@ void control_table::insert(string s)
     // check if the element in already present or not
     if (lookup(s))
         cout << s << " is Probably already present" << endl;
-    else 
+    else
     {
-        int h = hash(s);
-        if (bitarray[h] == false) {
-            assigned++;
-            bitarray[h] = true;
+        vector<int> h = hash(s);
+        for (int i = 0; i < h.size(); ++i) {
+            if (bitarray[h[i]] == false) {
+                assigned++;
+                bitarray[h[i]] = true;
+            }
         }
+
     }
 }
