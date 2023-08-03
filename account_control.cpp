@@ -68,10 +68,18 @@ void control_table::create_account(){
     cin.ignore();
 
     string username, password;
-    std::cout<<"Please enter your username: ";
+    std::cout<<"Please enter your username (enter x to exit): ";
     getline(cin, username);
-    std::cout<<"Please enter your password: ";
+    if (username == "X" || username == "x") {
+        cout<<"--------------"<<endl;
+        return;
+    }
+    std::cout<<"Please enter your password (enter x to exit): ";
     getline(cin, password);
+    if (password == "X" || password == "x") {
+        cout<<"--------------"<<endl;
+        return;
+    }
     bool cons1 = 0, cons2 = 0, cons3 = 1;
 
     while (!cons1 || !cons2 || cons3)
@@ -80,30 +88,61 @@ void control_table::create_account(){
         cons1 = constraint_check(username);
         if (!cons1)
         {
-            std::cout<<"Please enter your username: ";
+            std::cout<<"Invalid username"<<endl;
+
+            std::cout<<"Please enter your username (enter x to exit): ";
             getline(cin, username);
-            std::cout<<"Please enter your password: ";
+            if (username == "X" || username == "x") {
+                cout<<"--------------"<<endl;
+                return;
+            }
+            std::cout<<"Please enter your password (enter x to exit): ";
             getline(cin, password);
+            if (password == "X" || password == "x") {
+                cout<<"--------------"<<endl;
+                return;
+            }
+
             continue;
         }
         cons2 = password_constraint_check(password);
         if (!cons2 || checkWeakPass(password))
         {
-            if (checkWeakPass(password)) cout<<"Password is too weak"<<endl;
-            std::cout<<"Please enter your username: ";
+            if (checkWeakPass(password)) cout<<"Password is too weak"<<endl<<endl;
+            
+            std::cout<<"Please enter your username (enter x to exit): ";
             getline(cin, username);
-            std::cout<<"Please enter your password: ";
+            if (username == "X" || username == "x") {
+                cout<<"--------------"<<endl;
+                return;
+            }
+            std::cout<<"Please enter your password (enter x to exit): ";
             getline(cin, password);
+            if (password == "X" || password == "x") {
+                cout<<"--------------"<<endl;
+                return;
+            }
+
             continue;
         }
         cons3 = lookup(username);
         if (cons3)
         {
-            std::cout<<"Username has been used before"<<endl;
-            std::cout<<"Please enter your username: ";
+            std::cout<<"Username has been used before"<<endl<<endl;
+
+            std::cout<<"Please enter your username (enter x to exit): ";
             getline(cin, username);
-            std::cout<<"Please enter your password: ";
+            if (username == "X" || username == "x") {
+                cout<<"--------------"<<endl;
+                return;
+            }
+            std::cout<<"Please enter your password (enter x to exit): ";
             getline(cin, password);
+            if (password == "X" || password == "x") {
+                cout<<"--------------"<<endl;
+                return;
+            }
+
             continue;
         }
     }
@@ -111,8 +150,7 @@ void control_table::create_account(){
     insert(username);
     user_pass[username] = password;
     cout<<"Account created successfully"<<endl;
-    choosing_operation();
-    
+    cout<<"--------------"<<endl;
 }
 
 bool control_table::check_existed_username(string username)
@@ -165,7 +203,7 @@ void control_table::multiple_register()
     }
     system("cls");
     cout << "Multiple register successfully!\n";
-    choosing_operation();
+    cout<<"--------------"<<endl;
 }
 
 void control_table::login()
@@ -176,25 +214,33 @@ void control_table::login()
     int check_name = false;
     int check_pass = false;
 
-    cout << "Please enter your username: ";
+    cout << "Please enter your username (enter x to exit): ";
     getline(cin, name);
+
+    if (name == "X" || name == "x")
+    {
+        current_state = 0;
+        cout<<"--------------"<<endl;
+        return;
+    }
+    
     check_name = check_existed_username(name);
     
     if (!check_name)
     {
         cout << "Username is not exist!\n";
-        choosing_operation();
+        cout<<"--------------"<<endl;
         return;
     }
 
     while (!check_pass)
     {
-        cout << "Please enter your password: ";
+        cout << "Please enter your password (enter x to exit): ";
         getline(cin, pass);
         if (pass == "X" || pass == "x")
         {
             current_state = 0;
-            choosing_operation();
+            cout<<"--------------"<<endl;
             return;
         }
         check_pass = check_correct_password(name, pass);
@@ -208,12 +254,12 @@ void control_table::login()
     if (c == 'X' || c == 'x')
     {
         current_state = 0;
-        choosing_operation();
+        cout<<"--------------"<<endl;
         return;
     }
     else
     {
-        cout << "Invalid input!\n";
+        cout << "Invalid input! Press X to logout!\n";
         return;
     }
 }
@@ -229,25 +275,31 @@ void control_table::change_password()
     bool check_pass = false;
     bool check_new_pass = false;
 
-    cout << "Please enter your username: ";
+    cout << "Please enter your username (enter x to exit): ";
     getline(cin, name);
+    if (name == "X" || name == "x")
+    {
+        current_state = 0;
+        cout<<"--------------"<<endl;
+        return;
+    }
     check_name = check_existed_username(name);
     
     if (!check_name)
     {
         cout << "Username is not exist!\n";
-        choosing_operation();
+        cout<<"--------------"<<endl;
         return;
     }
 
     while (!check_pass)
     {
-        cout << "Please enter your OLD password: ";
+        cout << "Please enter your OLD password (enter x to exit): ";
         getline(cin, pass);
         if (pass == "X" || pass == "x")
         {
             current_state = 0;
-            choosing_operation();
+            cout<<"--------------"<<endl;
             return;
         }
         check_pass = check_correct_password(name, pass);
@@ -264,24 +316,24 @@ void control_table::change_password()
 
     while (new_pass_2 != new_pass)
     {
-        cout << "Please enter your NEW password one more time: ";
+        cout << "Please enter your NEW password one more time (enter x to exit): ";
         getline(cin, new_pass_2);
         if (new_pass_2 == "X" || new_pass_2 == "x")
         {
             current_state = 0;
-            choosing_operation();
+            cout<<"--------------"<<endl;
             return;
         }
         if (new_pass_2 != new_pass) cout << "The new password is not correct! Please try again! or press X to exit\n";
     }
 
     cout << "Successfully changed password!\n";
+    cout<<"--------------"<<endl;
     user_pass[name] = new_pass;
-    choosing_operation();
-
 }
 
 void control_table::choosing_operation() {
+    start:
     std::cout << "Please choose an operation: " << std::endl;
     std::cout << "1. Create a new account" << std::endl;
     std::cout << "2. Login" << std::endl;
@@ -306,7 +358,5 @@ void control_table::choosing_operation() {
         }
         return;
     }
-    else {
-        choosing_operation();
-    }
+    goto start;
 }
