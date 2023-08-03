@@ -40,6 +40,7 @@ bool password_constraint_check(string password)
             return false;
         }
     }
+    checklist.close();
     if (!has_upper || !has_lower || !has_digit || !has_speical) {
         cout<<"Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character"<<endl;
         return false;
