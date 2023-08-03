@@ -22,7 +22,10 @@ bool constraint_check(string username)
 bool password_constraint_check(string password)
 {
     int len = password.size();
-    if (len <= 10 || len >= 20) return false;
+    if (len <= 10 || len >= 20) {
+        cout<<"Password must be between 10 and 20 characters"<<endl;
+        return false;
+    }
     bool has_upper = false, has_lower = false, has_digit = false, has_number = false, has_speical = false;
     for (int i = 0; i < len; i++)
     {
@@ -31,21 +34,25 @@ bool password_constraint_check(string password)
         if (password[i] >= '0' && password[i] <= '9') has_digit = true;
         if (password[i] == '!' || password[i] == '@' || password[i] == '#' || password[i] == '$' || password[i] == '%' || password[i] == '^' || password[i] == '&' || password[i] == '*' || password[i] == '(' || password[i] == ')' || password[i] == '-' || password[i] == '+') has_speical = true;
     }  
-    ifstream checklist("Weak-Pass.txt");
-    string s;
-    while (checklist >> s)
-    {
-        if (s == password) {
-            cout<<"Password is too weak"<<endl;
-            return false;
-        }
-    }
-    checklist.close();
     if (!has_upper || !has_lower || !has_digit || !has_speical) {
         cout<<"Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character"<<endl;
         return false;
     }
     return true;
+}
+bool control_table::checkWeakPass(string pass)
+{
+    return lookup(pass_bitarray, sz, pass);
+}
+control_table::control_table() {
+    for (int i = 0; i < sz; i++) bitarray[i] = pass_bitarray[i] = 0;
+    ifstream checklist("Weak-Pass.txt");
+    string s;
+    while (checklist >> s)
+    {
+        insert(pass_bitarray, sz, s);
+    }
+    checklist.close();
 }
 void control_table::create_account(){
     string username, password;
@@ -53,9 +60,9 @@ void control_table::create_account(){
     std::cin>>username;
     std::cout<<"Please enter your password: ";
     std::cin>>password;
-    bool cons1 = 0, cons2 = 0, cons3 = 0;
+    bool cons1 = 0, cons2 = 0, cons3 = 1;
 
-    while (!cons1 || !cons2 || !cons3)
+    while (!cons1 || !cons2 || cons3)
     {
         //check until username and password satisfy the constraints and havent been used before
         cons1 = constraint_check(username);
@@ -68,8 +75,9 @@ void control_table::create_account(){
             continue;
         }
         cons2 = password_constraint_check(password);
-        if (!cons2)
+        if (!cons2 || checkWeakPass(password))
         {
+            if (checkWeakPass(password)) cout<<"Password is too weak"<<endl;
             std::cout<<"Please enter your username: ";
             std::cin>>username;
             std::cout<<"Please enter your password: ";
@@ -77,7 +85,7 @@ void control_table::create_account(){
             continue;
         }
         cons3 = lookup(bitarray, sz, username);
-        if (!cons3)
+        if (cons3)
         {
             std::cout<<"Username has been used before"<<endl;
             std::cout<<"Please enter your username: ";
@@ -87,8 +95,12 @@ void control_table::create_account(){
             continue;
         }
     }
-
-
+    current_state = 0;
+    insert(bitarray, sz, username);
+    ofstream out("account.txt");
+    out<<username<<" "<<password<<endl;
+    cout<<"Account created successfully"<<endl;
+    choosing_operation();
 }
 
 void control_table::choosing_operation() {
