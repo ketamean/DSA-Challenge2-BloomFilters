@@ -99,6 +99,8 @@ void control_table::create_account(){
     insert(bitarray, sz, username);
     ofstream out("account.txt");
     out<<username<<" "<<password<<endl;
+    out.close();
+    user_pass[username] = password;
     cout<<"Account created successfully"<<endl;
     choosing_operation();
 }

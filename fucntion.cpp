@@ -7,10 +7,10 @@ bool control_table::check_existed_username(string username)
     return lookup(bitarray, sz, username);
 }
 
-bool control_table::check_existed_password(string password)
+bool control_table::check_correct_password(string username, string password)
 {
-
-};
+    return user_pass[username] == password;
+}
 
 void control_table::multiple_register()
 {
@@ -37,7 +37,7 @@ void control_table::multiple_register()
         file_in >> name;
         file_in >> password;
 
-        if (!constraint_check(name) || !password_constraint_check(name))
+        if (!constraint_check(name) || !password_constraint_check(name) || checkWeakPass(password) || lookup(bitarray, sz, name) || lookup(bitarray, sz, password))
         {
             file_out << name << " " << password << endl;
         }
@@ -69,7 +69,7 @@ void control_table::login()
     {
         cout << "Please enter your password: ";
         getline(cin, pass);
-        check_pass = check_existed_password(pass);
+        check_pass = check_correct_password(name, pass);
         if (!check_pass) cout << "Your password is not correct! Please try again!\n";
     }
 
@@ -99,7 +99,7 @@ void control_table::change_password()
     {
         cout << "Please enter your OLD password: ";
         getline(cin, pass);
-        check_pass = check_existed_password(pass);
+        check_pass = check_correct_password(name, pass);
         if (!check_pass) cout << "Your password is not correct! Please try again!\n";
     }
 
