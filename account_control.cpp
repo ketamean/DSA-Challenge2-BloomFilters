@@ -42,7 +42,7 @@ bool password_constraint_check(string password)
 }
 bool control_table::checkWeakPass(string pass)
 {
-    return lookup(pass_bitarray, sz, pass);
+    return lookup(pass);
 }
 control_table::control_table() {
     for (int i = 0; i < sz; i++) bitarray[i] = pass_bitarray[i] = 0;
@@ -50,19 +50,22 @@ control_table::control_table() {
     string s;
     while (checklist >> s)
     {
-        insert(pass_bitarray, sz, s);
+        insert(s);
     }
     checklist.close();
     ifstream file("account.txt");
     string username, password;
     while (file >> username >> password)
     {
-        insert(bitarray, sz, username);
+        insert(username);
         user_pass[username] = password;
     }
     file.close();
 }
 void control_table::create_account(){
+
+    system("cls");
+
     string username, password;
     std::cout<<"Please enter your username: ";
     std::cin>>username;
@@ -92,7 +95,7 @@ void control_table::create_account(){
             std::cin>>password;
             continue;
         }
-        cons3 = lookup(bitarray, sz, username);
+        cons3 = lookup(username);
         if (cons3)
         {
             std::cout<<"Username has been used before"<<endl;
@@ -104,13 +107,140 @@ void control_table::create_account(){
         }
     }
     current_state = 0;
-    insert(bitarray, sz, username);
-    ofstream out("account.txt");
+    insert(username);
+    string file_out = "account.txt";
+    ofstream out;
+    out.open(file_out, ios::app);
     out<<username<<" "<<password<<endl;
     out.close();
     user_pass[username] = password;
     cout<<"Account created successfully"<<endl;
     choosing_operation();
+    
+}
+
+bool control_table::check_existed_username(string username)
+{
+    return lookup(username);
+}
+
+bool control_table::check_correct_password(string username, string password)
+{
+    return user_pass[username] == password;
+}
+
+void control_table::multiple_register()
+{
+    system("cls");
+    string file = "SignUp.txt";
+    string output = "Fail.txt";
+    string accounts = "account.txt";
+
+    ifstream file_in;
+    ofstream out;
+    ofstream file_out;
+
+    file_in.open(file);
+    file_out.open(output);
+   out.open(accounts, ios::app);
+
+    if (!file_in.is_open())
+    {
+        cout << "File not found!\n";
+        return;
+    }
+
+    string name, password;
+
+    while (!file_in.eof())
+    {
+        file_in >> name;
+        file_in >> password;
+
+        if (!constraint_check(name) || !password_constraint_check(name) || checkWeakPass(password) || lookup(name) || lookup(password))
+        {
+            file_out << name << " " << password << endl;
+        }
+        else
+        {
+            insert(name);
+            user_pass[name] = password;
+            out << name << password << endl;
+        }
+    }
+}
+
+void control_table::login()
+{ 
+    system("cls");
+    string name, pass;
+    int check_name = false;
+    int check_pass = false;
+
+    cout << "Please enter your username: ";
+    cin>>name;
+    check_name = check_existed_username(name);
+    
+    if (!check_name)
+    {
+        cout << "Username is not exist!\n";
+        return;
+    }
+
+    while (!check_pass)
+    {
+        cout << "Please enter your password: ";
+        cin>>pass;
+        check_pass = check_correct_password(name, pass);
+        if (!check_pass) cout << "Your password is not correct! Please try again!\n";
+    }
+
+    cout << "Successfully logged in!\n";
+}
+
+void control_table::change_password()
+{
+    system("cls");
+    string name, pass, new_pass;
+    string new_pass_2 = "";
+    bool check_name = false;
+    bool check_pass = false;
+    bool check_new_pass = false;
+
+    cout << "Please enter your username: ";
+    cin>>name;
+    check_name = check_existed_username(name);
+    
+    if (!check_name)
+    {
+        cout << "Username is not exist!\n";
+        return;
+    }
+
+    while (!check_pass)
+    {
+        cout << "Please enter your OLD password: ";
+        cin>>pass;
+        check_pass = check_correct_password(name, pass);
+        if (!check_pass) cout << "Your password is not correct! Please try again!\n";
+    }
+
+    while (!check_new_pass)
+    {
+        cout << "Please enter your NEW password: ";
+        cin>>new_pass;
+        check_new_pass = password_constraint_check(new_pass);
+        check_new_pass = check_new_pass && !checkWeakPass(new_pass);
+    }
+
+    while (new_pass_2 != new_pass)
+    {
+        cout << "Please enter your NEW password one more time: ";
+        cin>>new_pass_2;
+        if (new_pass_2 != new_pass) cout << "The new password is not correct! Please try again!\n";
+    }
+
+    cout << "Successfully changed password!\n";
 }
 
 void control_table::choosing_operation() {
@@ -123,13 +253,13 @@ void control_table::choosing_operation() {
     std::cout << "Your choice: ";
     std::cin >> current_state;
     std::cout << std::endl;
+
     if (current_state == 1) create_account();
     else if (current_state == 2) login();
     else if (current_state == 3) change_password();
     else if (current_state == 4) multiple_register();
     else if (current_state == 5) return;
     else {
-        std::cout << "Invalid operation" << std::endl;
         choosing_operation();
     }
 }
