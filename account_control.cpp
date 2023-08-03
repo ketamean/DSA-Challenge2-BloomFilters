@@ -53,6 +53,14 @@ control_table::control_table() {
         insert(pass_bitarray, sz, s);
     }
     checklist.close();
+    ifstream file("account.txt");
+    string username, password;
+    while (file >> username >> password)
+    {
+        insert(bitarray, sz, username);
+        user_pass[username] = password;
+    }
+    file.close();
 }
 void control_table::create_account(){
     string username, password;
@@ -115,4 +123,11 @@ void control_table::choosing_operation() {
     std::cin >> current_state;
     std::cout << std::endl;
     if (current_state == 1) create_account();
+    else if (current_state == 2) login();
+    else if (current_state == 3) change_password();
+    else if (current_state == 4) return;
+    else {
+        std::cout << "Invalid operation" << std::endl;
+        choosing_operation();
+    }
 }

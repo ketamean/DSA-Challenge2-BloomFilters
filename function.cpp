@@ -43,7 +43,8 @@ void control_table::multiple_register()
         }
         else
         {
-            //insert username and password
+            insert(bitarray, sz, name);
+            user_pass[name] = password;
         }
     }
 }
@@ -56,7 +57,7 @@ void control_table::login()
     int check_pass = false;
 
     cout << "Please enter your username: ";
-    getline(cin, name);
+    cin>>name;
     check_name = check_existed_username(name);
     
     if (!check_name)
@@ -68,7 +69,7 @@ void control_table::login()
     while (!check_pass)
     {
         cout << "Please enter your password: ";
-        getline(cin, pass);
+        cin>>pass;
         check_pass = check_correct_password(name, pass);
         if (!check_pass) cout << "Your password is not correct! Please try again!\n";
     }
@@ -86,7 +87,7 @@ void control_table::change_password()
     bool check_new_pass = false;
 
     cout << "Please enter your username: ";
-    getline(cin, name);
+    cin>>name;
     check_name = check_existed_username(name);
     
     if (!check_name)
@@ -98,7 +99,7 @@ void control_table::change_password()
     while (!check_pass)
     {
         cout << "Please enter your OLD password: ";
-        getline(cin, pass);
+        cin>>pass;
         check_pass = check_correct_password(name, pass);
         if (!check_pass) cout << "Your password is not correct! Please try again!\n";
     }
@@ -106,14 +107,15 @@ void control_table::change_password()
     while (!check_new_pass)
     {
         cout << "Please enter your NEW password: ";
-        getline(cin, new_pass);
+        cin>>new_pass;
         check_new_pass = password_constraint_check(new_pass);
+        check_new_pass = check_new_pass && !checkWeakPass(new_pass);
     }
 
     while (new_pass_2 != new_pass)
     {
         cout << "Please enter your NEW password one more time: ";
-        getline(cin, new_pass_2);
+        cin>>new_pass_2;
         if (new_pass_2 != new_pass) cout << "The new password is not correct! Please try again!\n";
     }
 
