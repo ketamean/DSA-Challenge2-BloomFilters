@@ -157,7 +157,7 @@ void control_table::multiple_register()
         file_in >> name;
         file_in >> password;
 
-        if (!constraint_check(name) || !password_constraint_check(name) || checkWeakPass(password) || lookup(name) || lookup(password))
+        if (!constraint_check(name) || !password_constraint_check(password) || checkWeakPass(password) || lookup(name) || lookup(password))
         {
             file_out << name << " " << password << endl;
         }
